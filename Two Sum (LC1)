@@ -1,0 +1,44 @@
+/*
+Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+Example:
+
+Given nums = [2, 7, 11, 15], target = 9,
+
+Because nums[0] + nums[1] = 2 + 7 = 9,
+return [0, 1].
+
+Solution
+This problem requires to return the indices of two sum than added to the specified target.
+The straightforward way is to traverse the element, fix one, and find if the other element exist in the array.
+O(n2) time complexity is needed here.
+
+To reduce the time complxity, we can use a hash map to query the other elemnt in the array. the time complexuty will be O(n).
+first store all number in the hash map. then travels the array for the other elemnt if exist in the map.
+
+There is one problem that the array may have duplicated elements.  one element may have two indice.
+
+so for one element, we can query if the other element is in the previous order, if not, insert it to the map, until all 
+elements are process.
+*/
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        vector<int>re(2,-1);
+        unordered_map<int,int>numMap;
+        for(int i = 0; i<nums.size(); i++){
+          if(numMap.count(target-nums[i])){
+              re[0] = i;
+              re[1] = numMap[target-nums[i]];
+              break;
+          }
+          else{
+            numMap[nums[i]] = i;
+          }
+        }
+        return re;
+    }
+};
