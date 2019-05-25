@@ -1,0 +1,53 @@
+Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+An input string is valid if:
+
+    Open brackets must be closed by the same type of brackets.
+    Open brackets must be closed in the correct order.
+
+Note that an empty string is also considered valid.
+
+Example 1:
+
+Input: "()"
+Output: true
+
+Example 2:
+
+Input: "()[]{}"
+Output: true
+
+Example 3:
+
+Input: "(]"
+Output: false
+
+Example 4:
+
+Input: "([)]"
+Output: false
+
+Example 5:
+
+Input: "{[]}"
+Output: true
+
+Analysis and Soulution
+   In this issue, match the parenthese is the key point.
+   It needs  match in pority.  the inplut last need to pop first. so a stack is need here.
+   
+class Solution {
+public:
+    bool isValid(string s) {
+        if(s.empty()) return true;
+        unordered_map<char,char> matchmap({make_pair(')','('), make_pair(']','['), make_pair('}','{')});
+        stack<char> st;
+        for(int i = 0; i < s.length(); i++){
+          if(st.empty()||st.top() != matchmap[s[i]]) st.push(s[i]);
+          else
+            st.pop();
+        }
+        return st.empty();
+    }
+};
+
