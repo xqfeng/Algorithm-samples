@@ -33,3 +33,26 @@ public:
         return;
     }
 };
+
+Solution 2:
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int iz = -1, id = 0;
+        for(; id<nums.size(); id++){
+            if(nums[id] == 0){
+                if(iz==-1) iz = id;
+            }
+            else {
+                if(iz != -1&&id>iz){
+                    nums[iz++] = nums[id];
+                    nums[id] = 0;
+                }
+            }
+        }
+    }
+};
+
+summary: 
+solution 2 has less operator than solution 1
+but has same time complexity O(n)
