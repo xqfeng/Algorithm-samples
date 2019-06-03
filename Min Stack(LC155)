@@ -1,0 +1,93 @@
+ Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+
+    push(x) -- Push element x onto stack.
+    pop() -- Removes the element on top of the stack.
+    top() -- Get the top element.
+    getMin() -- Retrieve the minimum element in the stack.
+
+Example:
+
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin();   --> Returns -3.
+minStack.pop();
+minStack.top();      --> Returns 0.
+minStack.getMin();   --> Returns -2.
+
+Analysis & Solution
+  To get the minimum element in constant time, we need to use another stack to record the minimal elemnt in each operation as cache.
+  
+  class MinStack {
+public:
+    /** initialize your data structure here. */
+    MinStack() {
+        
+    }
+    
+    void push(int x) {
+        orgs.push(x);
+        if(caches.empty() || caches.top()>x) 
+            caches.push(x);
+        else{
+            caches.push(caches.top());
+        }
+    }
+    
+    void pop() {
+        orgs.pop();
+        caches.pop();
+    }
+    
+    int top() {
+        return orgs.top();
+    }
+    
+    int getMin() {
+        return caches.top();
+    }
+    
+    stack<int> orgs;
+    stack<int> caches;
+ 
+};
+
+To reduce the space complexity for cache, we can use a pair<int,int> to record the duplciated minimal element each time.
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    MinStack() {
+        
+    }
+    
+    void push(int x) {
+        orgs.push(x);
+        if(caches.empty() || caches.top().first>x) 
+            caches.push(make_pair(x,1));
+        else{
+            caches.top().second ++;
+        }
+    }
+    
+    void pop() {
+        orgs.pop();
+        if(caches.top().second==1) {
+            caches.pop();
+        }
+        else
+           caches.top().second --; 
+    }
+    
+    int top() {
+        return orgs.top();
+    }
+    
+    int getMin() {
+        return caches.top().first;
+    }
+    
+    stack<int> orgs;
+   // stack<int> caches;
+    stack<pair<int,int>> caches;
+};
