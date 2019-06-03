@@ -1,0 +1,72 @@
+Given two strings s and t , write a function to determine if t is an anagram of s.
+
+Example 1:
+
+Input: s = "anagram", t = "nagaram"
+Output: true
+
+Example 2:
+
+Input: s = "rat", t = "car"
+Output: false
+
+Note:
+You may assume the string contains only lowercase alphabets.
+
+Follow up:
+What if the inputs contain unicode characters? How would you adapt your solution to such case?
+
+Analysis & solution
+For anagram words, the number of each characters is the same.
+we can calculte the time they repeat anc compared. 
+it use the constrant space complexity.
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        if(s.size()!=t.size()) return false;
+        int cache[26] = {0}, i = 0;
+        for(; i<s.size(); i++)
+            cache[s[i]-97] ++;
+        for(i=0; i<t.size(); i++)
+            cache[t[i]-97]--;
+        bool ret = true;
+        for(i=0; i<26; i++){
+            if(cache[i] != 0) {
+                ret = false;
+                break;
+            }
+        }
+        return ret;
+    }
+};
+
+for the follow up, we can't use constrant space for unicode characters.
+we can use hash map to record the number of elements repeated.
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        if(s.size()!= t.size()) return false;
+        unordered_map<char, int> cmap;
+        int i = 0;
+        for(; i<s.size(); i++){
+            if(cmap.count(s[i])) cmap[s[i]] ++;
+            else cmap[s[i]] = 1;
+        }
+        
+        bool ret = true;
+        for(i=0; i<t.size();i++){
+            if(cmap.count(t[i])){
+                if(cmap[t[i]] == 1) cmap.erase(t[i]);
+                else cmap[t[i]]--;
+            }
+            else{
+                ret = false;
+            }
+        }
+        return ret;
+        
+    }
+};
+
