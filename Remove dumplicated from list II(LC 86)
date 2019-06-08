@@ -1,0 +1,42 @@
+Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list.
+
+Example 1:
+
+Input: 1->2->3->3->4->4->5
+Output: 1->2->5
+
+Example 2:
+
+Input: 1->1->1->2->3
+Output: 2->3
+
+
+Analysis & solution
+This problem requires that remove all dumplicates from sorted list.
+To delete the duplicates , we need to know the duplicates's pre and next, then pre->next = next->next to delete nodes.
+To avoid the head deleeted , we can add dummy node to the head.
+
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        ListNode *nh = new ListNode(0);
+        nh->next = head;
+        ListNode *pre = nh, *ptr = head;
+        while(ptr&&ptr->next){
+            if(ptr->next->val != ptr->val){
+                pre = ptr;
+                ptr = ptr->next;
+            }
+            else{
+                while(ptr&&ptr->next&&ptr->val==ptr->next->val){
+                    ptr = ptr->next;
+                }
+                pre->next = ptr->next;
+                ptr = ptr->next;
+            }
+        }
+        head = nh->next;
+        delete nh;
+        return head;
+    }
+};
