@@ -1,0 +1,84 @@
+71. Simplify Path
+Given an absolute path for a file (Unix-style), simplify it. Or in other words, convert it to the canonical path.
+
+In a UNIX-style file system, a period . refers to the current directory. Furthermore, a double period .. moves the directory up a level. For more information, see: Absolute path vs relative path in Linux/Unix
+
+Note that the returned canonical path must always begin with a slash /, and there must be only a single slash / between two directory names. The last directory name (if it exists) must not end with a trailing /. Also, the canonical path must be the shortest string representing the absolute path.
+
+ 
+
+Example 1:
+
+Input: "/home/"
+Output: "/home"
+Explanation: Note that there is no trailing slash after the last directory name.
+
+Example 2:
+
+Input: "/../"
+Output: "/"
+Explanation: Going one level up from the root directory is a no-op, as the root level is the highest level you can go.
+
+Example 3:
+
+Input: "/home//foo/"
+Output: "/home/foo"
+Explanation: In the canonical path, multiple consecutive slashes are replaced by a single one.
+
+Example 4:
+
+Input: "/a/./b/../../c/"
+Output: "/c"
+
+Example 5:
+
+Input: "/a/../../b/../c//.//"
+Output: "/c"
+
+Example 6:
+
+Input: "/a//b////c/d//././/.."
+Output: "/a/b/c"
+
+Analysis & Solution
+To simplify the path, need to split the path by "/" and  process . and .. 
+also it will corner case is there is no "/" in the end of the string.
+
+class Solution {
+public:
+    string simplifyPath(string path) {
+       //stack, ./.. 
+        size_t pos = path.find("/");
+        vector<string>spath;
+        while(string::npos != pos&&pos < path.size()){
+            size_t epos = path.find("/", pos+1);
+            if(string::npos == epos)
+                epos = path.size();
+            string strdir = path.substr(pos+1, epos-pos-1);
+            if(!strdir.compare(".")||(strdir.empty())){
+                pos = epos;
+                continue;
+            } 
+            else if(!strdir.compare("..")){
+                if(!spath.empty()) spath.pop_back();
+            }
+            else {
+                spath.push_back(strdir);
+            }
+            pos = epos;
+        }
+        string res;
+        for(auto it:spath){
+            res.append("/");
+            res.append(it);
+        }
+        if(res.empty()) res.append("/");
+        return res;
+    }
+};
+
+Summary
+    the time complexity is O(n).
+    note 1,  for queue and stack. the elements inside can't be traverse one by one.
+    note 2,  for vector,  operator[] is twice slower than auto it:vec using the testcases of leetcode. why ?
+    
